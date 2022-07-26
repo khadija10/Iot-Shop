@@ -5,6 +5,11 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\categoryController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\DeliveryController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\OrderController;
+
+
 
 use Gloudemans\Shoppingcart\Facades\Cart;
 
@@ -33,7 +38,7 @@ Route::get('products', [ProductController::class, 'index'])
     ->name('products.index');
 
 Route::get('details/{id}', [ProductController::class, 'show'])
-->withoutMiddleware('auth');
+    ->withoutMiddleware('auth');
 
 
 
@@ -49,7 +54,7 @@ Route::get('details/{id}', [ProductController::class, 'show'])
 // Route::get('admin/add-product', [ProductController::class, 'create'])->name('admin.products.add-product');
 // Route::post('/ajout', [ProductController::class, 'store'])->name('ajoutProd');
 
-//     //cate    
+//     //cate
 // Route::get('admin/add-category', [CategoryController::class, 'create'])->name('admin.categories.add-category');
 // Route::post('/ajoutCate', [CategoryController::class, 'store'])->name('ajoutCate');
 
@@ -78,7 +83,7 @@ Route::get('recherche', [ProductController::class, 'recherche'])
     ->withoutMiddleware('auth');
 
 
-//cart 
+//cart
 
 Route::post('/panier/ajouter' , [CartController::class, 'store'])
     ->name('cart.store')
@@ -97,14 +102,60 @@ Route::delete('/panier/{rowId}', [CartController::class, 'destroy'])
     ->withoutMiddleware('auth');
 
 Route::patch('/panier/{rowId}', [CartController::class, 'update'])
-->name('cart.update')
-->withoutMiddleware('auth');
+    ->name('cart.update')
+    ->withoutMiddleware('auth');
 
 //checkout
 
 Route::get('/payment', [CheckoutController::class, 'index'])
     ->name('checkout.index')
     ->withoutMiddleware('auth');
+
+//Delivery
+
+Route::get('/payment/delivery/create', [DeliveryController::class, 'create'])
+    ->name('delivery.create')
+    ->withoutMiddleware('auth');
+
+
+Route::post('/payment/delivery/store', [DeliveryController::class, 'store'])
+    ->name('delivery.store')
+    ->withoutMiddleware('auth');
+
+//payment
+
+Route::get('/payment/create', [PaymentController::class, 'create'])
+    ->name('payment.create')
+    ->withoutMiddleware('auth');
+
+
+Route::post('/payment/store', [PaymentController::class, 'store'])
+    ->name('payment.store')
+    ->withoutMiddleware('auth');
+
+
+//order
+Route::get('/payment/confirm', [OrderController::class, 'index'])
+    ->name('payment.confirm')
+    ->withoutMiddleware('auth');
+
+Route::get('/order/create', [OrderController::class, 'create'])
+    ->name('order.create')
+    ->withoutMiddleware('auth');
+
+
+Route::post('/order/store', [OrderController::class, 'store'])
+    ->name('order.store')
+    ->withoutMiddleware('auth');
+
+
+Route::get('commande/{id}', [OrderController::class, 'show'])
+    ->withoutMiddleware('auth');
+
+
+Route::get('/test', function () {
+        return view('checkout.test');
+     });
 
 
 require __DIR__.'/auth.php';

@@ -15,6 +15,9 @@ class Product extends Model
 
 
     protected $guarded = [];
+
+    protected $fillable = ["stock", "active"];
+
     use HasFactory;
 
     public function orders(): BelongsToMany{
@@ -37,7 +40,7 @@ class Product extends Model
      * @var array
      */
     public static $rules = [
-        
+
     ];
 
 

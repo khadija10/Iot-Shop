@@ -26,21 +26,7 @@ class CheckoutController extends Controller
     public function index()
     {
 
-
-        Stripe::setApiKey('sk_test_VePHdqKTYQjKNInc7u56JBrQ');
-
-        $intent = PaymentIntent::create([
-            'amount' => round(Cart::total()),
-            'currency' => 'usd'
-        ]);
-
-        //dd($intent);
-
-        $clientSecret = Arr::get($intent, 'client_secret');
-
-        return view('checkout.index', [
-            'clientSecret' => $clientSecret
-        ]);
+        return view('checkout.index');
 
     }
 
@@ -51,7 +37,9 @@ class CheckoutController extends Controller
      */
     public function create()
     {
-        //
+
+        return view('checkout.confirm');
+
     }
 
     /**
@@ -62,7 +50,7 @@ class CheckoutController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**

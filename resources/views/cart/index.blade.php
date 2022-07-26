@@ -3,7 +3,7 @@
 
 @section('title') Shop Shop @endsection
 
-@section('css') 
+@section('css')
 
   <style>
     @media (min-width: 1025px) {
@@ -26,13 +26,13 @@
 
 
 
-@section('main') 
+@section('main')
 
 
 <section class="h-100 h-custom" style="background-color: #eee;">
 @if(Cart::count() > 0)
 
-  
+
 <div class="p-3 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col">
@@ -48,13 +48,18 @@
 
             @foreach(Cart::content() as $product)
 
-    
+
+            @php
+               // echo(Cart::content());
+            @endphp
+
+
                 <div class="card mb-3 mb-lg-0 mt-2" >
                   <div class="card-body">
                     <div class="d-flex justify-content-between">
                       <div class="d-flex flex-row align-items-center">
                         <div>
-                          <img class="img-fluid rounded-3" src="{{ asset('storage/'. str_replace("public", "", $product->image)) }}" alt="image" style="width: 65px;">
+                          <img class="img-fluid rounded-3" src="{{ asset('storage/'. str_replace("public", "", $product->model->image)) }}" alt="image" style="width: 65px;">
                         </div>
                         <div class="ms-3" style="margin-left:100px;">
                           <h5>{{ $product->name }}</h5>
@@ -62,24 +67,23 @@
                       </div>
                       <div class="d-flex flex-row align-items-center">
                       <div style="margin-right:10px;">
-                            <select name="qty" id="qty" data-id="{{ $product->rowId }}"
-                            class="custom-select">
+                            <select name="qty" id="qty" data-id="{{ $product->rowId }}" data-stock="{{ $product->model->stock }}" class="custom-select">
                               @for($i=1; $i <=7; $i++)
                               <option {{ $i == $product->qty ? 'selected' : '' }} value="{{ $i }}" > {{ $i }} </option>
                               @endfor
-                                
+
                         </select>
                       </div>
                         <div style="width: 170px;">
                           <h5 class="mb-0">{{ getPrice($product->subtotal()) }}</h5>
                         </div>
 
-                      
-                        <form action="{{ route('cart.destroy', $product->rowId) }}" method="POST">   
-                          @csrf                         
+
+                        <form action="{{ route('cart.destroy', $product->rowId) }}" method="POST">
+                          @csrf
                           @method('DELETE')
                         <button class="text-dark" type="submit" style="color: #cecece;"><i class="fas fa-trash-alt"></i></button>
-                        
+
                         </form>
                     </div>
                     </div>
@@ -98,7 +102,7 @@
 
 
 
-                     
+
                     <hr class="my-4">
 
                     <div class="d-flex justify-content-between">
@@ -119,11 +123,11 @@
                     <button type="button" class="btn btn-info btn-block btn-lg">
                       <div class="d-flex justify-content-between">
                         <span>{{ getPrice(Cart::total()) }} </span>
-                        
 
-                        
 
-                        <button class="btn btn-success btn-block btn-lg"> <a href="{{ route('checkout.index') }}"> Passer à la caisse <i class="fas fa-long-arrow-alt-right ms-2"></i></a></button>
+
+
+                        <button class="btn btn-success btn-block btn-lg"> <a href="{{ route('checkout.index') }}"> <div>Passer à la caisse <i class="fas fa-long-arrow-alt-right ms-2"></i></div> </a></button>
 
                       </div>
                     </button>
@@ -139,18 +143,18 @@
         </div>
       </div>
     </div>
-    
-        
+
+
     </div>
   </div>
 
-  
-  @else 
+
+  @else
     <div class="container-fluid bg-secondary mb-5">
         <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 100px">
             <h5> Votre panier est vide</h5>
             <div class="d-inline-flex">
-            <p class="m-0"><a href="/">Home</a></p>           
+            <p class="m-0"><a href="/">Home</a></p>
 
             </div>
         </div>
@@ -181,29 +185,39 @@
 <script>
     var qts = document.querySelectorAll('#qty');
 
+
     Array.from(qts).forEach((element) => {
         element.addEventListener('change', function() {
 
-            var rowId = this.getAttribute('data-id');
-            
-            console.log(rowId);
 
+
+            var rowId = this.getAttribute('data-id');
+            var stcok = this.getAttribute('data-stock');
+
+            // console.log(rowId);
             var myHeaders ={
                         'Accept': 'application/json, text-plain, */*',
                         'Content-Type': 'application/json',
                         'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                       };
-                const quant={
-                  qty: this.value
+
+            const body={
+                  qty: this.value,
+                  stock: stcok
                 };
-          var myInit = { 
+
+            var url = `/panier/${rowId}`;
+
+            var myInit = {
                           headers: myHeaders,
                           method: 'PATCH',
-                          body: JSON.stringify(quant)
+                          body: JSON.stringify(body)
                       };
-                      
-            var url = `/panier/${rowId}`;
+
+
+
+
 
             fetch(url, myInit).then((data) => {
                 console.log(data);
@@ -211,8 +225,11 @@
             }).catch((error) => {
                 console.log(error);
             })
+
         });
     });
+
+
 
 </script>
 

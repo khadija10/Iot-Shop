@@ -38,6 +38,7 @@ class ProductController extends Controller
         //->whereActive(true)
         //->take(16)
         ->get();
+
         return view('products.index', compact('products'));
     }
 
@@ -52,11 +53,11 @@ class ProductController extends Controller
         //->whereActive(true)
         //->take(16)
         ->get();
-        
+
         return view('welcome', compact('products', 'categories'));
     }
 
-    
+
 
     public function list()
     {
@@ -90,8 +91,8 @@ class ProductController extends Controller
      */
     public function store(CreateProductRequest $request)
     {
-
-        $path = $request->file('image')->store('public/images');
+        $fileName = time().$request->file('image')->getClientOriginalName();
+        $path = $request->file('image')->storeAs('images', $fileName, 'public');
         $input = $request->all();
         $productInfo=[
             'name' => $input['name'],
@@ -107,7 +108,7 @@ class ProductController extends Controller
         return redirect(route('admin.products.product-list'))->with('success' , 'Product saved successfully');
     }
 
-    
+
 
     /**
      * Display the specified resource.
@@ -119,13 +120,19 @@ class ProductController extends Controller
     {
         $product = $this->productRepository->find($id);
 
+        $stock = $product->stock == 0 ? 'indisponible' : 'disponible';
+
+
         // if (empty($epreuve)) {
         //     Flash::error('Epreuve not found');
 
         //     return redirect(route('epreuves.index'));
         // }
 
-        return view('products.details-product', compact('product'));
+        return view('products.details-product', [
+            'product' => $product,
+            'stock' => $stock
+        ]);
     }
 
     /**
@@ -163,7 +170,7 @@ class ProductController extends Controller
         }
 
         $input = $request->all();
-        
+
         $productInfo=[
             'name' => $input['name'],
             'description' => $input['description'],
@@ -178,7 +185,7 @@ class ProductController extends Controller
         return redirect(route('admin.products.product-list'));
     }
 
-    
+
     /**
      * Remove the specified resource from storage.
      *
@@ -206,8 +213,9 @@ class ProductController extends Controller
     public function recherche(){
 
         if(request()->categorie_id){
-            $products = Product::where('category_id', request()->categorie_id)  
-            ->get();
+            $products = Product::with('categories')->whereHas('categories', function($query) {
+                $query->where('category_id', request()->categorie_id);
+            })->get();
 
             //dd(request()->categorie_id);
 
@@ -222,5 +230,5 @@ class ProductController extends Controller
         return view('products.recherche', compact('products'));
     }
 
-    
+
 }

@@ -13,7 +13,7 @@
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -28,12 +28,12 @@
     <link href="{{ URL::asset('shop/css/style.css'); }}" rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script><script src="dashboard.js"></script>
-    
+
     <!-- Custom styles for this template -->
     <link href="{{ URL::asset('admin/dashboard.js'); }}" rel="stylesheet">
 
 </head>
-      
+
 <x-app-layout id="reportsPage">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -55,7 +55,7 @@
               <span data-feather="home" class="align-text-bottom d-inline"></span>
               Dashboard
             </a>
-          
+
           </li>
           <li class="nav-item mb-3">
             <a class="nav-link d-inline" href="categories">
@@ -68,9 +68,9 @@
               <span data-feather="shopping-cart" class="align-text-bottom d-inline"></span>
               Products
             </a>
-          
+
           </li>
-          
+
           <li class="nav-item mb-3">
             <a class="nav-link d-inline" href="#">
               <span data-feather="users" class="align-text-bottom d-inline"></span>
@@ -97,12 +97,12 @@
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
     @yield('main')
 
-      
+
     </main>
   </div>
 </div>
 
-      
+
 
     </x-app-layout>
 

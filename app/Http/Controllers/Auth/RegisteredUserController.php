@@ -49,10 +49,9 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        if($user->name=="admin" && $user->password=="admin123"){
-            return redirect(RouteServiceProvider::HOME);
-        }else{
-            return redirect(RouteServiceProvider::WELCOME);
-        }
+
+        return redirect()->back();
+
+
     }
 }

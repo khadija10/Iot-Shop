@@ -36,8 +36,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        
-            return redirect(RouteServiceProvider::WELCOME);
+
+        return redirect()->back()->with('success', 'Connexion reussie');
     }
 
     /**

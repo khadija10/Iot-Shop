@@ -15,9 +15,22 @@
     <!-- Favicon -->
     <link href="img/favicon.ico" rel="icon">
 
+
+     <!-- Font-->
+     <link href="{{ URL::asset('checkout/css/roboto-font.css'); }}" rel="stylesheet">
+
+     <link href="{{ URL::asset('checkout/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css'); }}" rel="stylesheet">
+
+     <!-- datepicker -->
+     <link href="{{ URL::asset('checkout/css/jquery-ui.min.css'); }}" rel="stylesheet">
+
+     <!-- Main Style Css -->
+     <link href="{{ URL::asset('checkout/css/style.css'); }}" rel="stylesheet">
+
+
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -27,6 +40,14 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="{{ URL::asset('shop/css/style.css'); }}" rel="stylesheet">
+
+    {{-- for checkout --}}
+
+
+
+
+
+
 </head>
 
 <body>
@@ -35,7 +56,7 @@
     <div class="container-fluid">
         <div class="row align-items-center py-3 px-xl-5">
             <div class="col-lg-3 d-none d-lg-block">
-                <a href="" class="text-decoration-none">
+                <a href="/" class="text-decoration-none">
                     <h1 class="m-0 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border px-3 mr-1">Iot</span>Shop</h1>
                 </a>
             </div>
@@ -81,6 +102,14 @@
 
 @endif
 
+@if(session('error'))
+
+<div class="alert alert-danger">
+    {{ session('error')}}
+</div>
+
+@endif
+
 
     <!-- Topbar End -->
 
@@ -89,7 +118,7 @@
     @yield('navbar')
     <!-- Navbar End -->
 
-   
+
     @yield('main')
 
     @yield('prod')
@@ -105,8 +134,20 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="{{asset('shop/lib/easing/easing.min.js')}}"></script>
-    <script src="{{asset('shop/lib/owlcarousel/owl.carousel.min.js')}}"></script>
 
+
+
+    {{-- for checkout --}}
+
+<script src="{{asset('checkout/js/jquery-3.3.1.min.js')}}"></script>
+
+<script src="{{asset('checkout/js/jquery.steps.js')}}"></script>
+
+<script src="{{asset('checkout/js/jquery-ui.min.js')}}"></script>
+
+<script src="{{asset('checkout/js/main.js')}}"></script>
+
+<script src="{{asset('shop/lib/owlcarousel/owl.carousel.min.js')}}"></script>
 
     <!-- Contact Javascript File -->
 

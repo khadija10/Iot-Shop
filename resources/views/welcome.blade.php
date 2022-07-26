@@ -3,7 +3,7 @@
 
 @section('title') Shop Home @endsection
 
-@section('navbar') 
+@section('navbar')
 
     <!-- Navbar Start -->
     <div class="container-fluid mb-5">
@@ -31,7 +31,7 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                        
+
                         <div class="navbar-nav ml-auto py-0">
 
                         <!-- Authentication -->
@@ -43,7 +43,7 @@
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                         <div class="nav-item dropdown">
-                            
+
                                 <a href="logout" class="nav-link dropdown-toggle" data-toggle="dropdown">{{ Auth::user()->name }}</a>
                                 <div class="dropdown-menu rounded-0 m-0">
                                     <a href="logout" onclick="event.preventDefault();
@@ -103,7 +103,7 @@
 @endsection
 
 
-@section('main') 
+@section('main')
 <!-- Featured Start -->
 <div class="container-fluid pt-5">
         <div class="row px-xl-5 pb-3">
@@ -136,7 +136,7 @@
     <!-- Featured End -->
 
 
-    
+
 @endsection
 
 @section('prod')

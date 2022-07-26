@@ -25,7 +25,7 @@ class CartController extends Controller
      */
     public function index()
     {
-        
+
 
         return view('cart.index');
     }
@@ -59,9 +59,21 @@ class CartController extends Controller
 
         $product = Product::find($request->product_id);
        //dd($product->image);
-        Cart::add($product->id, $product->name, 1, $product->price)
-        ->associate('App\Models\Product');
-        return redirect()->route('welcome')->with('success' , 'produit ajouté avec succes' );
+
+        if($product->stock == 0){
+                $product->update(['active' => $product->active += 1]);
+                return redirect()->route('welcome')->with('error' , 'ce produit n\'est plus disponible! Merci de reésayer plus tard');
+
+        }else{
+
+            $product->update(['active' => $product->active =0]);
+
+            Cart::add($product->id, $product->name, 1, $product->price)
+                ->associate('App\Models\Product');
+            return redirect()->route('welcome')->with('success' , 'produit ajouté avec succes' );
+
+        }
+
     }
 
     /**
@@ -95,15 +107,26 @@ class CartController extends Controller
      */
     public function update(Request $request, $rowId)
     {
+
         $data = $request->json()->all();
-        $validator = Validator::make($request->all(), [
-            'qty' => 'reuired|numeric|between:1,7'
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     'qty' => 'reuired|numeric|between:1,7'
+        // ]);
 
-        if($validator->fails()){
-            Session::flash('danger' , 'la quantité du produit ne doit pas depassée 7');
 
-            return response()->json(['error' => 'le panier n`est bien mis à jour']);
+
+
+        // if($validator->fails()){
+        //     Session::flash('danger' , 'la quantité du produit ne doit pas depassée 7');
+
+        //     return response()->json(['error' => 'le panier n`est bien mis à jour']);
+
+        // }
+
+        if($data['qty'] > $data['stock']){
+            Session::flash('error' , 'la quantité du produit n\'est pas disponible! Merci de reésayer plus tard');
+
+            return response()->json(['error' => 'Product qty not available']);
 
         }
 
@@ -113,6 +136,10 @@ class CartController extends Controller
 
         return response()->json(['success' => 'le panier est bien mis à jour']);
     }
+
+    // public function quantity(Request $request, $rowId){
+    //     dd("bbbbbbbb");
+    // }
 
     /**
      * Remove the specified resource from storage.
@@ -128,4 +155,7 @@ class CartController extends Controller
 
         return back()->with('success', 'le produit est supprimé');
     }
+
+
+
 }
