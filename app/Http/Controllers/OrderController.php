@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Mail;
+
+use App\Mail\MyMailer;
+
+
 
 use App\Models\Order;
 use App\Models\Product;
@@ -21,7 +26,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return view('checkout.commander');
+        return view('checkout.delivery');
     }
 
     /**
@@ -32,7 +37,7 @@ class OrderController extends Controller
     public function create()
     {
 
-        return view('checkout.confirm');
+        return view('checkout.delivery');
 
     }
 
@@ -50,11 +55,95 @@ class OrderController extends Controller
 
         }
 
-
-
-        $payment_id = $request->payment_id;
+        $option = $request->option;
 
         $order = new Order();
+
+
+        if( $option == "inscription"){
+
+        $order->destName = $request->destName;
+        $order->phone = $request->phone;
+        $order->address = $request->address;
+        $order->ville = $request->ville;
+
+
+
+        $products = [];
+
+        $i= 0;
+
+        foreach(Cart::content() as $product){
+            $products['product_' . $i][]=$product->model->name;
+            $products['product_' . $i][]=$product->model->price;
+            $products['product_' . $i][]=$product->qty;
+
+            $i++;
+        }
+
+
+        $order->products = serialize($products);
+
+        $order->user_id = Auth::user()->id;
+
+
+        $order->save();
+        $order_id = $order->id;
+
+        return redirect(route('order.confirm', ['order_id' => $order_id]));
+
+
+        }elseif($option == "recuperation"){
+
+        $order->destName = "";
+        $order->phone = "";
+        $order->address = "";
+        $order->ville = "";
+
+
+
+        $products = [];
+
+        $i= 0;
+
+        foreach(Cart::content() as $product){
+            $products['product_' . $i][]=$product->model->name;
+            $products['product_' . $i][]=$product->model->price;
+            $products['product_' . $i][]=$product->qty;
+
+            $i++;
+        }
+
+
+        $order->products = serialize($products);
+
+        $order->user_id = Auth::user()->id;
+
+        $order->save();
+
+        $email= Auth::user()->email;
+
+
+
+        $details = [
+            'subject'=>"Récuperation de la commande chez Tingene",
+            'body'=>"Bojour cher client, Merci d'avoir passé une commande chez, vous pouvez passer dans notre local à liberté 6 2 voix boutique Uno pour recuperer votre commande après le paiement",
+        ];
+
+         Mail::to($email)->send(new MyMailer($details));
+
+         $order_id = $order->id;
+
+            return redirect(route('payment.create', ['order_id' => $order_id]));
+        }else{
+
+
+        $order = new Order();
+
+        $order->destName = $request->destName;
+        $order->phone = $request->phone;
+        $order->address = $request->address;
+        $order->ville = $request->ville;
 
 
         $products = [];
@@ -73,23 +162,17 @@ class OrderController extends Controller
         $order->products = serialize($products);
 
 
-        if(Auth::check()){
-            $order->user_id = Auth::user()->id;
-        }else{
-            $order->user_id =null;
-        }
-
-        $order->payment_id = $payment_id;
+        $order->user_id = NULL;
 
 
         $ok = $order->save();
 
+        $order_id = $order->id;
 
 
-        if($ok){
-            $this->updateStock();
-            Cart::destroy();
-            return redirect(url('commande/'.$order->id))->with('success', 'votre commande a ete traité avec succès');
+
+            return redirect(route('order.confirm', ['order_id' => $order_id]));
+
         }
 
 
@@ -103,10 +186,11 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($order_id)
     {
-        $order = Order::find($id);
-        return view('checkout.commander');
+        $order = Order::find($order_id);
+
+        return view('checkout.confirm', ['order' => $order]);
     }
 
     /**
@@ -140,7 +224,10 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
-        //
+           $order = Order::findOrFail($id);
+           $order->delete();
+           return redirect(route('welcome'))->with('danger',  'vous avez annulé votre commande!!!');
+
     }
 
 
@@ -168,4 +255,28 @@ class OrderController extends Controller
             $product->update(['stock' => $product->stock - $item->qty]);
         }
     }
+
+    private function resetStock()
+    {
+
+        foreach(Cart::content() as $item){
+            $product = Product::find($item->model->id);
+
+            $product->update(['stock' => $product->stock + $item->qty]);
+        }
+    }
+
+    public function valideOrder(Request $request)
+    {
+
+        $this->updateStock();
+        $order_id = $request->order_id;
+        return redirect(route('payment.create', ['order_id' => $order_id]));
+     }
+
+
 }
+
+
+
+

@@ -13,7 +13,6 @@
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
         "laravelcollective/html": "^6.3",
-        "livewire/livewire": "^2.10",
         "stripe/stripe-php": "^8.10",
         "tcg/voyager": "^1.5"
     },

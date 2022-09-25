@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Gloudemans\Shoppingcart\Facades\Cart;
 
 
 class PaymentController extends Controller
@@ -19,7 +20,8 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        //
+        return view('checkout.confirm');
+
 
     }
 
@@ -45,12 +47,11 @@ class PaymentController extends Controller
             'transaction_number' => 'required',
         ]);
 
-
         $payment = Payment::create($request->all());
 
-        $payment_id = $payment->id;
+        Cart::destroy();
 
-        return redirect(route('order.create',['payment_id' => $payment_id]))->with('success','Payment saved successfully.');
+        return redirect(route('welcome'))->with('success','Votre commande a été payé avec succes');
     }
 
     /**

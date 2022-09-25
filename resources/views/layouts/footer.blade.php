@@ -20,11 +20,20 @@
   <section
     class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom"
   >
+
+  <div class="me-5 d-none d-lg-block">
+    <form action="{{ route('newsletter.store') }}" method="POST">
+        @csrf
+    <button type="submit" class="btn btn-primary btn-block mb-4">Je m'inscris à la newsletter</button>
+   </form>
+</div>
     <!-- Left -->
     <div class="me-5 d-none d-lg-block">
       <h4>Follow us</h4>
     </div>
     <!-- Left -->
+
+
 
     <!-- Right -->
     <div>

@@ -8,6 +8,17 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\EmailController;
+use App\Http\Controllers\EmailMessagesController;
+
+use App\Http\Controllers\AdminMail;
+
+
+
+
+
+
 
 
 
@@ -41,38 +52,6 @@ Route::get('details/{id}', [ProductController::class, 'show'])
     ->withoutMiddleware('auth');
 
 
-
-//admin
-
-// Route::get('admin/dashboard', function () {
-//     return view('/admin/dashboard');
-// })->middleware(['auth'])->name('admin.dashboard');
-
-// Route::get('/admin/products', [ProductController::class, 'list'])
-// ->name('admin.products.product-list');
-
-// Route::get('admin/add-product', [ProductController::class, 'create'])->name('admin.products.add-product');
-// Route::post('/ajout', [ProductController::class, 'store'])->name('ajoutProd');
-
-//     //cate
-// Route::get('admin/add-category', [CategoryController::class, 'create'])->name('admin.categories.add-category');
-// Route::post('/ajoutCate', [CategoryController::class, 'store'])->name('ajoutCate');
-
-// Route::get('/admin/categories', [CategoryController::class, 'index'])
-// ->name('categories.index');
-
-// Route::get('/admin/products/add', [CategoryController::class, 'list'])
-// ->name('categorie.add');
-
-
-
-
-
-// Route::get('admin/{id}', [ProductController::class, 'destroy']);
-
-
-// Route::get('admin/{id}/edit', [ProductController::class, 'edit'])->name('admin.products.product-edit');
-// Route::get('admin/{id}/update', [ProductController::class, 'update'])->name('admin.products.product-edit');
 
 //products
 
@@ -111,15 +90,8 @@ Route::get('/payment', [CheckoutController::class, 'index'])
     ->name('checkout.index')
     ->withoutMiddleware('auth');
 
-//Delivery
-
-Route::get('/payment/delivery/create', [DeliveryController::class, 'create'])
-    ->name('delivery.create')
-    ->withoutMiddleware('auth');
-
-
-Route::post('/payment/delivery/store', [DeliveryController::class, 'store'])
-    ->name('delivery.store')
+Route::post('/option', [CheckoutController::class, 'store'])
+    ->name('order.option')
     ->withoutMiddleware('auth');
 
 //payment
@@ -135,8 +107,11 @@ Route::post('/payment/store', [PaymentController::class, 'store'])
 
 
 //order
-Route::get('/payment/confirm', [OrderController::class, 'index'])
-    ->name('payment.confirm')
+
+
+
+Route::get('/order/create', [OrderController::class, 'index'])
+    ->name('order')
     ->withoutMiddleware('auth');
 
 Route::get('/order/create', [OrderController::class, 'create'])
@@ -149,13 +124,50 @@ Route::post('/order/store', [OrderController::class, 'store'])
     ->withoutMiddleware('auth');
 
 
-Route::get('commande/{id}', [OrderController::class, 'show'])
+Route::get('commande/{order_id}', [OrderController::class, 'show'])
+    ->name('order.confirm')
     ->withoutMiddleware('auth');
+
+
+Route::post('valider/', [OrderController::class, 'valideOrder'])
+    ->name('order.valide')
+    ->withoutMiddleware('auth');
+
+Route::get('annuler/{order_id}', [OrderController::class, 'destroy'])
+    ->name('order.annuler')
+    ->withoutMiddleware('auth');
+
 
 
 Route::get('/test', function () {
         return view('checkout.test');
      });
+
+
+//Newsletter
+
+
+Route::get('newsletter/subscribe', [NewsletterController::class, 'index'])
+    ->withoutMiddleware('auth');
+
+
+Route::post('newsletter/store', [NewsletterController::class, 'storeEmail'])
+    ->name('newsletter.store')
+    ->withoutMiddleware('auth');
+
+
+
+
+Route::get('admin/mail', [AdminMail::class, 'index'])
+    ->withoutMiddleware('auth');
+
+Route::post('admin/mail', [AdminMail::class, 'sendMail'])
+    ->name('sendMail')
+    ->withoutMiddleware('auth');
+
+
+
+
 
 
 require __DIR__.'/auth.php';

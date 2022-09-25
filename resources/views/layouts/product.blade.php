@@ -14,7 +14,7 @@
                         <h6 class="text-truncate mb-3">{{ $product->name }}</h6>
                         <h6 class="text-truncate mb-3">{{ $product->description }}</h6>
                         <div class="d-flex justify-content-center">
-                            <h6>{{ $product->price }} CFA</h6><h6 class="text-muted ml-2"><del>123.00 CFA</del></h6>
+                            <h6>{{ getPrice($product->price) }} CFA</h6>
                         </div>
 
                     </div>

@@ -16,17 +16,6 @@
     <link href="img/favicon.ico" rel="icon">
 
 
-     <!-- Font-->
-     <link href="{{ URL::asset('checkout/css/roboto-font.css'); }}" rel="stylesheet">
-
-     <link href="{{ URL::asset('checkout/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css'); }}" rel="stylesheet">
-
-     <!-- datepicker -->
-     <link href="{{ URL::asset('checkout/css/jquery-ui.min.css'); }}" rel="stylesheet">
-
-     <!-- Main Style Css -->
-     <link href="{{ URL::asset('checkout/css/style.css'); }}" rel="stylesheet">
-
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -42,11 +31,6 @@
     <link href="{{ URL::asset('shop/css/style.css'); }}" rel="stylesheet">
 
     {{-- for checkout --}}
-
-
-
-
-
 
 </head>
 

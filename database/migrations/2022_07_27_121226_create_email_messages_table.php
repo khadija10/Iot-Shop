@@ -13,8 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->unsignedBigInteger('stock')->after('image')->default(20);
+        Schema::create('email_messages', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->string('subject');
+            $table->text('body');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('products', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('email_messages');
     }
 };

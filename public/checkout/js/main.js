@@ -10,23 +10,24 @@ $(function(){
         labels: {
             previous : 'Previous',
             next : 'Next Step',
-            finish : 'finish',
+            finish : 'Submit',
             current : ''
         },
-        onStepChanging: function (event, currentIndex, newIndex) {
-            var fullname = $('#first_name').val() + ' ' + $('#last_name').val();
-            var email = $('#email').val();
-            var phone = $('#phone').val();
-            var username = $('#username').val();
-            var gender = $('form input[type=radio]:checked').val();
-            var address = $('#address').val();
 
-            $('#fullname-val').text(fullname);
-            $('#email-val').text(email);
-            $('#phone-val').text(phone);
-            $('#username-val').text(username);
-            $('#address-val').text(address);
-            $('#gender-val').text(gender);
+        onStepChanging: function (event, currentIndex, newIndex) {
+            var destName = $('#destName').val();
+            var phone = $('#phone').val();
+            var address = $('#address').val();
+            var ville = $('#ville').val();
+            var option = ('form input[type=radio]:checked').val();
+
+
+            $('#destName_val').text(destName);
+            $('#phone_val').text(phone);
+            $('#ville_val').text(ville);
+            $('#address_val').text(address);
+            $('#option_val').text(option);
+
 
             return true;
         }

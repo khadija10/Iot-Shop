@@ -10,6 +10,15 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 
 
+use App\Models\Newsletter;
+use App\Models\EmailMessages;
+use App\Http\Controllers\EmailController;
+use Illuminate\Support\Facades\Auth;
+
+use App\Models\User;
+
+
+
 use Stripe\Stripe;
 use Stripe\PaymentIntent;
 
@@ -54,15 +63,28 @@ class CartController extends Controller
         });
 
         if($duplicata->isNotEmpty()) {
-            return redirect()->route('welcome')->with('success' , 'produit est dejà ajouté avec succes' );
+            return redirect()->route('welcome')->with('dander' , 'produit est dejà ajouté avec succes' );
         }
 
         $product = Product::find($request->product_id);
-       //dd($product->image);
+
 
         if($product->stock == 0){
-                $product->update(['active' => $product->active += 1]);
-                return redirect()->route('welcome')->with('error' , 'ce produit n\'est plus disponible! Merci de reésayer plus tard');
+            $product->update(['active' => $product->active += 1]);
+
+            if(Auth::user()){
+                $email = Auth::user()->email;
+
+                if(Auth::user()->is_newsletter){
+                    $mail_controller = new EmailController;
+                    $message = EmailMessages::where('subject', 'Disponiblite de produit')->first();
+                    $mail_controller->sendEmail($message->title, $message->subject, $message->body, $email);
+                    return redirect()->route('welcome')->with('error' , 'ce produit n\'est plus disponible! vous serez informer dès qu\'il sera disponible!!!');
+                }
+
+                return redirect()->route('welcome')->with('error' , 'ce produit n\'est plus disponible! Veillez vous inscrire à la newsletter pour etre informer de sa disponibilité');
+            }
+            return redirect()->route('welcome')->with('error' , 'ce produit n\'est plus disponible! Veillez vous abonner et vous inscrire à la newsletter pour etre informer de sa disponibilité');
 
         }else{
 
@@ -124,11 +146,41 @@ class CartController extends Controller
         // }
 
         if($data['qty'] > $data['stock']){
-            Session::flash('error' , 'la quantité du produit n\'est pas disponible! Merci de reésayer plus tard');
 
+            if(Auth::user()){
+                $email = Auth::user()->email;
+
+
+                if(Auth::user()->is_newsletter){
+
+
+                    $details = [
+                        'subject'=>"Produit indisponible",
+                        'body'=>"Bojour cher client, Vous serez desormais informer de la disponibilité des produits en rupture de stock dès qu'is deront disonible",
+                    ];
+
+                     Mail::to($email)->send(new MyMailer($details));
+
+                    Session::flash('danger' , 'cette quantité n\'est pas disponible! vous serez informer dès qu\'il sera disponible!!!');
+
+                    return response()->json(['error' => 'Product qty not available']);
+                }
+                else{
+                    Session::flash('danger' , 'cette quantité n\'est pas disponible!  Veillez vous inscrire à la newsletter pour etre informer informer dès qu\'il sera disponible!!!');
+
+                    return response()->json(['error' => 'Product qty not available']);
+
+                }
+
+
+            }
+
+            Session::flash('danger' , 'cette quantité n\'est pas disponible!  Veillez vous abonner et vous inscrire à la newsletter pour etre informer de sa disponibilité');
             return response()->json(['error' => 'Product qty not available']);
 
         }
+
+
 
         Cart::update($rowId, $data['qty']);
 
@@ -136,6 +188,9 @@ class CartController extends Controller
 
         return response()->json(['success' => 'le panier est bien mis à jour']);
     }
+
+
+
 
     // public function quantity(Request $request, $rowId){
     //     dd("bbbbbbbb");
@@ -153,7 +208,7 @@ class CartController extends Controller
 
         // Session::flash('success', 'La quantité à changé');
 
-        return back()->with('success', 'le produit est supprimé');
+        return back()->with('success', 'vous avez supprimé un produit du panier');
     }
 
 

@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 
+use Illuminate\Support\Facades\Auth;
+
 
 use Stripe\Stripe;
 use Stripe\PaymentIntent;
@@ -30,6 +32,7 @@ class CheckoutController extends Controller
 
     }
 
+
     /**
      * Show the form for creating a new resource.
      *
@@ -38,7 +41,7 @@ class CheckoutController extends Controller
     public function create()
     {
 
-        return view('checkout.confirm');
+        return view('checkout.index');
 
     }
 
@@ -50,6 +53,31 @@ class CheckoutController extends Controller
      */
     public function store(Request $request)
     {
+        $option = $request->all();
+
+
+        if( $option['option'] == "inscription")
+        {
+            if(Auth::check()){
+            return redirect(route('order.create', ["option" => $option['option']]));
+            }
+            else{
+                return redirect(route('login'));
+            }
+
+        }elseif($option['option'] == "recuperation"){
+
+            if(Auth::check()){
+                return redirect(route('order.create', ["option" => $option['option']]));
+                }
+                else{
+                    return redirect(route('login'));
+                }
+
+        }else{
+            return redirect(route('order.create', ["option" => $option['option']]));
+
+        }
 
     }
 

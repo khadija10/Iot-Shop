@@ -13,9 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('payments', function (Blueprint $table) {
-            $table->string('transaction_type');
-
+        Schema::create('livraisons', function (Blueprint $table) {
+            $table->id();
+            $table->text("NameLivreur");
+            $table->text("telephone");
+            $table->text("adresse");
+            $table->timestamps();
         });
     }
 
@@ -26,8 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('payments', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('livraisons');
     }
 };

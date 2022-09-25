@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('image');
             $table->integer('price');
             $table->boolean('active');
+            $table->unsignedBigInteger('stock')->default(20);
             $table->timestamps();
         });
     }

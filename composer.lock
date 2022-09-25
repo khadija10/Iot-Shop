@@ -5774,17 +5774,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/the-control-group/voyager.git",
-                "reference": "b384421603b579eff21d5cd7c25f375bccc93a0a"
+                "reference": "2812898464f279e14ad6e9f89e2e8bf992e00c91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/the-control-group/voyager/zipball/b384421603b579eff21d5cd7c25f375bccc93a0a",
-                "reference": "b384421603b579eff21d5cd7c25f375bccc93a0a",
+                "url": "https://api.github.com/repos/the-control-group/voyager/zipball/2812898464f279e14ad6e9f89e2e8bf992e00c91",
+                "reference": "2812898464f279e14ad6e9f89e2e8bf992e00c91",
                 "shasum": ""
             },
             "require": {
                 "arrilot/laravel-widgets": "^3.7",
-                "doctrine/dbal": "^2.5",
+                "doctrine/dbal": "^2.5|^3.1",
                 "ext-json": "*",
                 "illuminate/support": "~8.0|~9.0",
                 "intervention/image": "^2.4",
@@ -5858,7 +5858,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-05-04T07:20:57+00:00"
+            "time": "2022-07-22T07:58:51+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",

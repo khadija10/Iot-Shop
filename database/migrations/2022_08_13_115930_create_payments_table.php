@@ -13,21 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('payments', function (Blueprint $table) {
             $table->id();
 
-            $table->text('products');
+            $table->string('transaction_number');
+            $table->string('transaction_type');
 
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('payment_id');
-
-
-
+            $table->unsignedBigInteger('order_id');
 
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('payment_id')->references('id')->on('payments');
+            $table->foreign('order_id')->references('id')->on('orders');
 
         });
     }
@@ -39,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('payments');
     }
 };
